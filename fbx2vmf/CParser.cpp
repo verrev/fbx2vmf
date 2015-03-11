@@ -184,5 +184,49 @@ void *CParser::getVertices1P(FbxMesh *m)
 	mMeshHeader.mVertexLayout = vl;
 	return &mVertices1P[0];
 }
+bool CParser::getMaterial(FbxNode *n, std::vector<Material> &mats)
+{
+	// FbxGeometry *g
+	// n = g->GetNode();
 
+	int matCount = 0;
+	if (n)
+		matCount = n->GetMaterialCount();
+	if (matCount > 0){
+		for (int i = 0; i < matCount; ++i){
+			FbxSurfaceMaterial *material = n->GetMaterial(i);
+			if (material->GetClassId().Is(FbxSurfacePhong::ClassId)){
+				auto ambient = ((FbxSurfacePhong *)material)->Ambient;
+				XMFLOAT3 amb = XMFLOAT3(ambient.Get()[0], ambient.Get()[1], ambient.Get()[2]);
+				auto diffuse = ((FbxSurfacePhong *)material)->Diffuse;
+				XMFLOAT3 dif = XMFLOAT3(diffuse.Get()[0], diffuse.Get()[1], diffuse.Get()[2]);
+				auto specular = ((FbxSurfacePhong *)material)->Specular;
+				XMFLOAT3 spec = XMFLOAT3(specular.Get()[0], specular.Get()[1], specular.Get()[2]);
+				auto emissive = ((FbxSurfacePhong *)material)->Emissive;
+				XMFLOAT3 emi = XMFLOAT3(emissive.Get()[0], emissive.Get()[1], emissive.Get()[2]);
+				auto alpha = 1.0 - ((FbxSurfacePhong *)material)->TransparencyFactor;
+				auto shininess = ((FbxSurfacePhong *)material)->Shininess;
+				auto reflectivity = ((FbxSurfacePhong *)material)->ReflectionFactor;
+				Material m(MATERIAL_TYPE::PHONG, amb, dif, spec, emi, alpha, shininess, reflectivity);
+				mats.push_back(m);
+			}
+			else if (material->GetClassId().Is(FbxSurfaceLambert::ClassId)){
+				auto ambient = ((FbxSurfacePhong *)material)->Ambient;
+				XMFLOAT3 amb = XMFLOAT3(ambient.Get()[0], ambient.Get()[1], ambient.Get()[2]);
+				auto diffuse = ((FbxSurfacePhong *)material)->Diffuse;
+				XMFLOAT3 dif = XMFLOAT3(diffuse.Get()[0], diffuse.Get()[1], diffuse.Get()[2]);
+				auto emissive = ((FbxSurfacePhong *)material)->Emissive;
+				XMFLOAT3 emi = XMFLOAT3(emissive.Get()[0], emissive.Get()[1], emissive.Get()[2]);
+				auto alpha = 1.0 - ((FbxSurfacePhong *)material)->TransparencyFactor;
+				Material m(MATERIAL_TYPE::LAMBERT, amb, dif, XMFLOAT3(0, 0, 0), emi, alpha, 0, 0);
+				mats.push_back(m);
+			}
+			else{
+				// unk mat // THOW ERROR! ? 
+			}
+		}
+	}
+	if (mats.size() > 0) return 1;
+	return 0;
+}
 

@@ -16,6 +16,7 @@ private:
 	void getMeshes(FbxNode *node);
 private:
 	std::vector<FbxMesh*> mMeshes;
+	std::vector<FbxNode*> mNodes;
 	std::string mScenePath;
 	std::string mOutModelFilePath;
 };

@@ -8,6 +8,7 @@ class CParser
 public:
 	MeshHeader getMeshHeader();
 	void *getVertices(FbxMesh *m);
+	bool getMaterial(FbxNode *n, std::vector<Material> &mats);
 private:
 	void *getVertices1P(FbxMesh *m); 
 	void *getVertices1P1N(FbxMesh *m);

@@ -8,10 +8,11 @@
 class CExporter
 {
 public:
-	void exportModel(const std::string &outFilePath, std::vector<FbxMesh*> &meshes);
+	void exportModel(const std::string &outFilePath, std::vector<FbxMesh*> &meshes, std::vector<FbxNode*>&nodes);
 private:
 	UINT getVertexSize(const VERTEX_LAYOUT &vl);
 	void exportMesh(FbxMesh *mesh);
+	void exportMaterial(FbxNode *node);
 	bool write(void *data, const UINT &len, std::ios_base::openmode mode = std::ios::app);
 private:
 	std::string mModelFilePath;

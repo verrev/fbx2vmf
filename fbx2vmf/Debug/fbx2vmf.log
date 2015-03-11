@@ -1,5 +1,5 @@
-﻿Build started 10.03.2015 20:43:48.
-     1>Project "C:\Users\Vootele\Desktop\fbx2vmf\fbx2vmf\fbx2vmf.vcxproj" on node 2 (Build target(s)).
+﻿Build started 11.03.2015 8:48:33.
+     1>Project "C:\Users\Vootele\Desktop\fbx2vmf\fbx2vmf\fbx2vmf.vcxproj" on node 2 (Rebuild target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Visual Leak Detector\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt CConverter.cpp CExporter.cpp CParser.cpp main.cpp
          main.cpp
@@ -8,10 +8,20 @@
      1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(136): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(157): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(175): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(200): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(202): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(204): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(206): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(210): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'const float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(210): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(215): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(217): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(219): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(221): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
          CExporter.cpp
          CConverter.cpp
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cconverter.cpp(30): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cconverter.cpp(35): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cconverter.cpp(31): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cconverter.cpp(36): warning C4018: '<' : signed/unsigned mismatch
          Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Vootele\Desktop\fbx2vmf\Debug\fbx2vmf.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files (x86)\Visual Leak Detector\lib\Win32" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Vootele\Desktop\fbx2vmf\Debug\fbx2vmf.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Vootele\Desktop\fbx2vmf\Debug\fbx2vmf.lib" /MACHINE:X86 Debug\CConverter.obj
@@ -19,8 +29,8 @@
          Debug\CParser.obj
          Debug\main.obj
          fbx2vmf.vcxproj -> C:\Users\Vootele\Desktop\fbx2vmf\Debug\fbx2vmf.exe
-     1>Done Building Project "C:\Users\Vootele\Desktop\fbx2vmf\fbx2vmf\fbx2vmf.vcxproj" (Build target(s)).
+     1>Done Building Project "C:\Users\Vootele\Desktop\fbx2vmf\fbx2vmf\fbx2vmf.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:09.75
+Time Elapsed 00:00:10.99

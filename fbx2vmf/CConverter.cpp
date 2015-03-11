@@ -23,10 +23,11 @@ void CConverter::convertModel(FbxNode *rootNode)
 {
 	getMeshes(rootNode);
 	CExporter e;
-	e.exportModel(mOutModelFilePath, mMeshes);
+	e.exportModel(mOutModelFilePath, mMeshes,mNodes);
 }
 void CConverter::getMeshes(FbxNode *node)
 {
+	mNodes.push_back(node); // EXPERIMENTAL!
 	for (UINT i = 0; i < node->GetNodeAttributeCount(); ++i){
 		if (node->GetNodeAttributeByIndex(i)->GetAttributeType() == FbxNodeAttribute::eMesh){
 			mMeshes.push_back(static_cast<FbxMesh*>(node->GetNodeAttributeByIndex(i)));

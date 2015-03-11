@@ -3,7 +3,34 @@
 #include <Windows.h>
 #include <DirectXMath.h>
 using namespace DirectX;
+#define MAX_LAYOUT_ITEMS 3
+enum MATERIAL_TYPE
+{
+	PHONG,
+	LAMBERT
+};
+struct MaterialHeader
+{
+	MaterialHeader() { /* do not use !*/ }
+	MaterialHeader(const UINT &matCount) :
+		mMaterialCount(matCount){}
 
+	UINT mMaterialCount; //perhaps?
+};
+struct Material
+{
+	Material(){ /* do not use !*/ }
+	Material(const MATERIAL_TYPE &type,const XMFLOAT3 &ambient, const XMFLOAT3 &diffuse, const XMFLOAT3 &specular,
+		const XMFLOAT3 &emissive, const float &alpha,
+		const float &shininess, const float &reflectivity) :
+		mMaterialType(type),
+		mAmbient(ambient), mDiffuse(diffuse), mSpecular(specular),
+		mEmissive(emissive), mAlpha(alpha), mShininess(shininess),
+		mReflectivity(reflectivity){}
+	MATERIAL_TYPE mMaterialType;
+	XMFLOAT3 mAmbient, mDiffuse, mSpecular, mEmissive;
+	float mAlpha, mShininess, mReflectivity;
+};
 struct ModelHeader
 {
 	ModelHeader(){}
@@ -15,8 +42,7 @@ enum VERTEX_LAYOUT
 {
 	POSITION = 1,
 	NORMAL = 2,
-	UVS = 4,
-	MAX_LAYOUT_ITEMS = 3
+	UVS = 4
 };
 struct MeshHeader
 {
