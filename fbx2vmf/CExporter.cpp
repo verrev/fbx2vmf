@@ -1,6 +1,8 @@
 #include "CExporter.h"
 #include "CParser.h"
 #include <iostream>
+#include <set>
+
 void CExporter::exportModel(const std::string &outFilePath, std::vector<FbxMesh*> &meshes, std::vector<FbxNode*>&nodes)
 {
 	mModelFilePath = outFilePath;
@@ -38,15 +40,21 @@ void CExporter::exportMesh(FbxMesh *mesh)
 void CExporter::exportMaterials(std::vector<FbxNode*> nodes)
 {
 	std::vector<Material> materials;
+	std::vector<std::string> textures;
 	for (auto node : nodes){
-		mParser.getMaterial(node,materials);
+		mParser.getMaterials(node,materials,textures);
 	}
+	std::set<std::string> textureSet(textures.begin(), textures.end());
+	std::vector<std::string> texs(textureSet.begin(),textureSet.end()); // only unique ones left
 	if (materials.size()){
 		std::string s = mModelFilePath;
 		mModelFilePath.replace(mModelFilePath.size() - 3, 3, "vma");
 		MaterialHeader mh = MaterialHeader(materials.size());
 		write(&mh, sizeof(MaterialHeader),0);
 		write(&materials[0], mh.mMaterialCount * sizeof(Material));
+		TextureHeader th = TextureHeader(texs.size());
+		write(&th, sizeof(TextureHeader));
+		write(&texs[0], th.mTextureCount * sizeof(Texture)); // here we might need to remove some part of the path
 		mModelFilePath = s;
 	}
 } 

@@ -31,6 +31,18 @@ struct Material
 	XMFLOAT3 mAmbient, mDiffuse, mSpecular, mEmissive;
 	float mAlpha, mShininess, mReflectivity;
 };
+struct TextureHeader
+{
+	TextureHeader() { /* do not use !*/ }
+	TextureHeader(const UINT &textureCount) :
+	mTextureCount(textureCount){}
+
+	UINT mTextureCount;
+};
+struct Texture
+{
+	char mPath[30]; // bad design, but hey, whatcha gonna do?
+};
 struct ModelHeader
 {
 	ModelHeader(){}

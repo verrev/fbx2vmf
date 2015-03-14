@@ -184,7 +184,7 @@ void *CParser::getVertices1P(FbxMesh *m)
 	mMeshHeader.mVertexLayout = vl;
 	return &mVertices1P[0];
 }
-bool CParser::getMaterial(FbxNode *n, std::vector<Material> &mats)
+bool CParser::getMaterials(FbxNode *n, std::vector<Material> &mats, std::vector<std::string> &textures)
 {
 	int matCount = 0;
 	if (n)
@@ -221,9 +221,35 @@ bool CParser::getMaterial(FbxNode *n, std::vector<Material> &mats)
 			else{
 				// unk mat // THOW ERROR! ? 
 			}
+			//====================================================================== TEXTURES
+			FbxProperty property = material->FindProperty(FbxLayerElement::sTextureChannelNames[0]);
+			if (property.IsValid()){
+				unsigned int textureCount = property.GetSrcObjectCount<FbxTexture>();
+				for (unsigned int j = 0; j < textureCount; ++j){
+					FbxLayeredTexture* layeredTexture = property.GetSrcObject<FbxLayeredTexture>(j);
+					if (layeredTexture) { throw std::exception("Layered Texture is currently unsupported\n"); return 0; }
+					else{
+						FbxTexture* texture = property.GetSrcObject<FbxTexture>(j);
+						if (texture){
+							std::string textureType = property.GetNameAsCStr();
+							FbxFileTexture* fileTexture = FbxCast<FbxFileTexture>(texture);
+							if (fileTexture){
+								if (textureType == "DiffuseColor"){
+									textures.push_back(fileTexture->GetFileName());
+								}
+								else if (textureType == "SpecularColor"){
+									//textures.push_back(fileTexture->GetFileName()); UNSUPPORTED AS OF YET
+								}
+								else if (textureType == "Bump"){
+									//textures.push_back(fileTexture->GetFileName()); UNSUPPORTED AS OF YET
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	if (mats.size() > 0) return 1;
 	return 0;
 }
-
