@@ -34,7 +34,7 @@ void getUV(FbxMesh* inMesh, int inCtrlPointIndex, int inTextureUVIndex, int inUV
 		{
 			int index = vertexUV->GetIndexArray().GetAt(inCtrlPointIndex);
 			outUV.x = static_cast<float>(vertexUV->GetDirectArray().GetAt(index).mData[0]);
-			outUV.y = static_cast<float>(vertexUV->GetDirectArray().GetAt(index).mData[1]);
+			outUV.y = static_cast<float>(1 - vertexUV->GetDirectArray().GetAt(index).mData[1]); //INVERTED!
 		}
 		break;
 
@@ -235,7 +235,7 @@ bool CParser::getMaterials(FbxNode *n, std::vector<Material> &mats, std::vector<
 							FbxFileTexture* fileTexture = FbxCast<FbxFileTexture>(texture);
 							if (fileTexture){
 								if (textureType == "DiffuseColor"){
-									textures.push_back(fileTexture->GetFileName());
+									textures.push_back(fileTexture->GetRelativeFileName());
 								}
 								else if (textureType == "SpecularColor"){
 									//textures.push_back(fileTexture->GetFileName()); UNSUPPORTED AS OF YET

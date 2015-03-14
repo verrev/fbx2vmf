@@ -54,7 +54,11 @@ void CExporter::exportMaterials(std::vector<FbxNode*> nodes)
 		write(&materials[0], mh.mMaterialCount * sizeof(Material));
 		TextureHeader th = TextureHeader(texs.size());
 		write(&th, sizeof(TextureHeader));
-		write(&texs[0], th.mTextureCount * sizeof(Texture)); // here we might need to remove some part of the path
+		for (auto tex : texs){
+			Texture t;
+			sprintf_s(t.mPath, "%.100s", tex.c_str());
+			write(&t, sizeof(Texture)); // here we might need to remove some part of the path
+		}
 		mModelFilePath = s;
 	}
 } 

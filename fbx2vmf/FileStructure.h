@@ -41,7 +41,7 @@ struct TextureHeader
 };
 struct Texture
 {
-	char mPath[30]; // bad design, but hey, whatcha gonna do?
+	char mPath[100]; // bad design, but hey, whatcha gonna do?
 };
 struct ModelHeader
 {
