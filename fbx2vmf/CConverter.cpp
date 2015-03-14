@@ -27,9 +27,9 @@ void CConverter::convertModel(FbxNode *rootNode)
 }
 void CConverter::getMeshes(FbxNode *node)
 {
-	mNodes.push_back(node); // EXPERIMENTAL!
 	for (UINT i = 0; i < node->GetNodeAttributeCount(); ++i){
 		if (node->GetNodeAttributeByIndex(i)->GetAttributeType() == FbxNodeAttribute::eMesh){
+			mNodes.push_back(node); // EXPERIMENTAL!
 			mMeshes.push_back(static_cast<FbxMesh*>(node->GetNodeAttributeByIndex(i)));
 		}
 	}

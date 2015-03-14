@@ -186,9 +186,6 @@ void *CParser::getVertices1P(FbxMesh *m)
 }
 bool CParser::getMaterial(FbxNode *n, std::vector<Material> &mats)
 {
-	// FbxGeometry *g
-	// n = g->GetNode();
-
 	int matCount = 0;
 	if (n)
 		matCount = n->GetMaterialCount();

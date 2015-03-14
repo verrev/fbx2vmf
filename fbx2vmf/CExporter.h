@@ -12,7 +12,7 @@ public:
 private:
 	UINT getVertexSize(const VERTEX_LAYOUT &vl);
 	void exportMesh(FbxMesh *mesh);
-	void exportMaterial(FbxNode *node);
+	void exportMaterials(std::vector<FbxNode*> nodes);
 	bool write(void *data, const UINT &len, std::ios_base::openmode mode = std::ios::app);
 private:
 	std::string mModelFilePath;

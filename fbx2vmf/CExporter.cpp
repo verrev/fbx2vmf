@@ -9,13 +9,10 @@ void CExporter::exportModel(const std::string &outFilePath, std::vector<FbxMesh*
 	write(&mh, sizeof(ModelHeader), 0);
 
 	// Write meshes.
-	for (UINT i = 0; i < mh.mMeshCount; ++i){
-		exportMesh(meshes[i]);
+	for (auto mesh : meshes){
+		exportMesh(mesh);
 	}
-	// Write materials.
-	for (UINT i = 0; i < nodes.size(); ++i){
-		exportMaterial(nodes[i]);
-	}
+	exportMaterials(nodes);
 }
 UINT CExporter::getVertexSize(const VERTEX_LAYOUT &vl)
 {
@@ -38,15 +35,15 @@ void CExporter::exportMesh(FbxMesh *mesh)
 	write(&mh, sizeof(MeshHeader));
 	write(vertices, getVertexSize(mh.mVertexLayout) * mh.mVerticeCount);
 }
-void CExporter::exportMaterial(FbxNode *node)
+void CExporter::exportMaterials(std::vector<FbxNode*> nodes)
 {
-	/*
-	Avoid creating a new file here.
-	*/
 	std::vector<Material> materials;
-	if (mParser.getMaterial(node,materials)){
+	for (auto node : nodes){
+		mParser.getMaterial(node,materials);
+	}
+	if (materials.size()){
 		std::string s = mModelFilePath;
-		mModelFilePath = "materials.vmmf";
+		mModelFilePath.replace(mModelFilePath.size() - 3, 3, "vma");
 		MaterialHeader mh = MaterialHeader(materials.size());
 		write(&mh, sizeof(MaterialHeader),0);
 		write(&materials[0], mh.mMaterialCount * sizeof(Material));
