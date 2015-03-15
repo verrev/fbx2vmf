@@ -1,23 +1,25 @@
-﻿Build started 15.03.2015 1:07:26.
+﻿Build started 15.03.2015 13:37:19.
      1>Project "C:\Users\Vootele\Desktop\fbx2vmf\fbx2vmf\fbx2vmf.vcxproj" on node 2 (Rebuild target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppClean.targets(76,5): warning : The process cannot access the file 'c:\users\vootele\desktop\fbx2vmf\debug\fbx2vmf.ilk' because it is being used by another process.
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Visual Leak Detector\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt CConverter.cpp CExporter.cpp CParser.cpp main.cpp
          main.cpp
          CParser.cpp
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(126): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(136): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(157): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(175): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(197): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(199): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(201): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(203): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(207): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'const float', possible loss of data
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(207): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(212): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(214): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(216): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
-     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(218): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(20): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(135): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(145): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(167): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(185): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(207): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(209): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(211): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(213): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(217): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'const float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(217): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(222): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(224): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(226): warning C4244: 'argument' : conversion from 'fbxsdk_2015_1::FbxDouble' to 'float', possible loss of data
+     1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cparser.cpp(228): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
          CExporter.cpp
          CConverter.cpp
      1>c:\users\vootele\desktop\fbx2vmf\fbx2vmf\cconverter.cpp(30): warning C4018: '<' : signed/unsigned mismatch
@@ -28,9 +30,10 @@
          Debug\CExporter.obj
          Debug\CParser.obj
          Debug\main.obj
+         LINK : C:\Users\Vootele\Desktop\fbx2vmf\Debug\fbx2vmf.exe not found or not built by the last incremental link; performing full link
          fbx2vmf.vcxproj -> C:\Users\Vootele\Desktop\fbx2vmf\Debug\fbx2vmf.exe
      1>Done Building Project "C:\Users\Vootele\Desktop\fbx2vmf\fbx2vmf\fbx2vmf.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:10.96
+Time Elapsed 00:00:11.07

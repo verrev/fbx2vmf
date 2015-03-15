@@ -10,6 +10,15 @@ void *CParser::getVertices(FbxMesh *m)
 	mMeshHeader = MeshHeader(-1);
 	return getVertices1P1N1UV(m);
 }
+void getUV(FbxMesh* m, int i, int j, XMFLOAT2& outUV)
+{
+	FbxStringList lUVSetNameList;
+	m->GetUVSetNames(lUVSetNameList);
+	FbxVector2 fbxUV;
+	bool unmapped = 0;
+	m->GetPolygonVertexUV(i, j, lUVSetNameList.GetStringAt(0), fbxUV, unmapped);
+	outUV = XMFLOAT2(fbxUV.mData[0], 1 - fbxUV.mData[1]);
+}
 void getUV(FbxMesh* inMesh, int inCtrlPointIndex, int inTextureUVIndex, int inUVLayer, XMFLOAT2& outUV)
 {
 	if (inUVLayer >= 2 || inMesh->GetElementUVCount() <= inUVLayer)
@@ -139,7 +148,8 @@ void *CParser::getVertices1P1N1UV(FbxMesh *m)
 			Vertex1P1N1UV v;
 			getPosition(fbxVertices, index, v.mPos);
 			getNormal(m, index, vertexCounter, v.mNormal);
-			getUV(m, index, m->GetTextureUVIndex(i, j), 0, v.mUV);
+			getUV(m, i, j, v.mUV);
+			//getUV(m, index, m->GetTextureUVIndex(i, j), 0, v.mUV);
 			mVertices1P1N1UV.push_back(v);
 			++vertexCounter;
 		}
@@ -204,7 +214,7 @@ bool CParser::getMaterials(FbxNode *n, std::vector<Material> &mats, std::vector<
 				auto alpha = 1.0 - ((FbxSurfacePhong *)material)->TransparencyFactor;
 				auto shininess = ((FbxSurfacePhong *)material)->Shininess;
 				auto reflectivity = ((FbxSurfacePhong *)material)->ReflectionFactor;
-				Material m(MATERIAL_TYPE::PHONG, amb, dif, spec, emi, alpha, shininess, reflectivity);
+				Material m(MATERIAL_TYPE::PHONG, 1, amb, dif, spec, emi, alpha, shininess, reflectivity); // 1 - has mats
 				mats.push_back(m);
 			}
 			else if (material->GetClassId().Is(FbxSurfaceLambert::ClassId)){
@@ -215,7 +225,7 @@ bool CParser::getMaterials(FbxNode *n, std::vector<Material> &mats, std::vector<
 				auto emissive = ((FbxSurfacePhong *)material)->Emissive;
 				XMFLOAT3 emi = XMFLOAT3(emissive.Get()[0], emissive.Get()[1], emissive.Get()[2]);
 				auto alpha = 1.0 - ((FbxSurfacePhong *)material)->TransparencyFactor;
-				Material m(MATERIAL_TYPE::LAMBERT, amb, dif, XMFLOAT3(0, 0, 0), emi, alpha, 0, 0);
+				Material m(MATERIAL_TYPE::LAMBERT, 1, amb, dif, XMFLOAT3(0, 0, 0), emi, alpha, 0, 0); // 1 - has mats
 				mats.push_back(m);
 			}
 			else{
@@ -249,6 +259,10 @@ bool CParser::getMaterials(FbxNode *n, std::vector<Material> &mats, std::vector<
 				}
 			}
 		}
+	}
+	else{
+		Material m(MATERIAL_TYPE::PHONG, 0, XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 0), 1, 0, 0);
+		mats.push_back(m);
 	}
 	if (mats.size() > 0) return 1;
 	return 0;

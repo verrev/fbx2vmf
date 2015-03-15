@@ -20,16 +20,18 @@ struct MaterialHeader
 struct Material
 {
 	Material(){ /* do not use !*/ }
-	Material(const MATERIAL_TYPE &type,const XMFLOAT3 &ambient, const XMFLOAT3 &diffuse, const XMFLOAT3 &specular,
+	Material(const MATERIAL_TYPE &type,const int &hasTextures,const XMFLOAT3 &ambient, const XMFLOAT3 &diffuse, const XMFLOAT3 &specular,
 		const XMFLOAT3 &emissive, const float &alpha,
 		const float &shininess, const float &reflectivity) :
-		mMaterialType(type),
+		mMaterialType(type),mHasTextures(hasTextures),
 		mAmbient(ambient), mDiffuse(diffuse), mSpecular(specular),
 		mEmissive(emissive), mAlpha(alpha), mShininess(shininess),
 		mReflectivity(reflectivity){}
+	int mHasTextures;
 	MATERIAL_TYPE mMaterialType;
 	XMFLOAT3 mAmbient, mDiffuse, mSpecular, mEmissive;
 	float mAlpha, mShininess, mReflectivity;
+	int pad[3];
 };
 struct TextureHeader
 {
