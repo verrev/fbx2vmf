@@ -48,7 +48,8 @@ void CExporter::exportMaterials(std::vector<FbxNode*> nodes)
 	std::vector<std::string> texs(textureSet.begin(),textureSet.end()); // only unique ones left
 	if (materials.size()){
 		std::string s = mModelFilePath;
-		mModelFilePath.replace(mModelFilePath.size() - 3, 3, "vma");
+		mModelFilePath.replace(mModelFilePath.size() - 3, 3, "vma"); // this will all be wrapped into a single .vmf file later
+		// but as of yet, for technical purpouses it is separate from the vertex data.
 		MaterialHeader mh = MaterialHeader(materials.size());
 		write(&mh, sizeof(MaterialHeader),0);
 		write(&materials[0], mh.mMaterialCount * sizeof(Material));
@@ -57,7 +58,7 @@ void CExporter::exportMaterials(std::vector<FbxNode*> nodes)
 		for (auto tex : texs){
 			Texture t;
 			sprintf_s(t.mPath, "%.100s", tex.c_str());
-			write(&t, sizeof(Texture)); // here we might need to remove some part of the path
+			write(&t, sizeof(Texture));
 		}
 		mModelFilePath = s;
 	}
