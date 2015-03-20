@@ -51,8 +51,11 @@ void CExporter::exportMaterials(std::vector<FbxNode*> nodes)
 	for (auto node : nodes){
 		mParser.getMaterials(node,materials,textures);
 	}
+	/*
 	std::set<std::string> textureSet(textures.begin(), textures.end()); // this might mangle the indexes of mats.
 	std::vector<std::string> texs(textureSet.begin(),textureSet.end()); // only unique ones left
+	*/
+	std::vector<std::string> texs(textures.begin(), textures.end()); // !!
 	if (materials.size()){
 		std::string s = mModelFilePath;
 		mModelFilePath.replace(mModelFilePath.size() - 3, 3, "vma"); // this will all be wrapped into a single .vmf file later

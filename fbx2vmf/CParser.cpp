@@ -83,6 +83,8 @@ void *CParser::getVertices1P1N1UV(FbxMesh *m)
 }
 bool CParser::getMaterials(FbxNode *n, std::vector<Material> &mats, std::vector<std::string> &textures)
 {
+	std::vector<int> uniqueIDs;
+
 	int matCount = 0;
 	bool hasTextures = 0;
 	if (n)
@@ -90,6 +92,7 @@ bool CParser::getMaterials(FbxNode *n, std::vector<Material> &mats, std::vector<
 	if (matCount > 0){
 		for (int i = 0; i < matCount; ++i){
 			FbxSurfaceMaterial *material = n->GetMaterial(i);
+			uniqueIDs.push_back(material->GetUniqueID());
 			// Textures.
 			FbxProperty property = material->FindProperty(FbxLayerElement::sTextureChannelNames[0]);
 			if (property.IsValid()){
@@ -117,7 +120,6 @@ bool CParser::getMaterials(FbxNode *n, std::vector<Material> &mats, std::vector<
 					}
 				}
 			}
-			//material->GetUniqueID(); // maybe??
 			if (material->GetClassId().Is(FbxSurfacePhong::ClassId)){
 				auto ambient = ((FbxSurfacePhong *)material)->Ambient;
 				XMFLOAT3 amb = XMFLOAT3(ambient.Get()[0], ambient.Get()[1], ambient.Get()[2]);
