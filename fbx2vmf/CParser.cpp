@@ -10,27 +10,53 @@ void *CParser::getVertices(FbxMesh *m)
 	mMeshHeader = MeshHeader(-1);
 	return getVertices1P1N1UV(m); // modulate here
 }
-bool CParser::getMaterialIndices(FbxMesh *m, std::vector<int> &materialIndices)
+bool CParser::getMaterialIndices(FbxMesh *m, std::vector<MaterialIndex> &matInts)
 {
-	int triangleCount = m->GetPolygonCount(); 
+	int triangleCount = m->GetPolygonCount();
 	FbxLayerElementArrayTemplate<int> *indices;
+	std::vector<int>materialIndices;
 	if (m->GetElementMaterial()){
 		indices = &(m->GetElementMaterial()->GetIndexArray());
 		if (indices){
 			switch (m->GetElementMaterial()->GetMappingMode()){
 			case FbxGeometryElement::eByPolygon:
 				if (indices->GetCount() == triangleCount)
-					for (int i = 0; i < triangleCount; ++i) materialIndices.push_back(indices->GetAt(i));
+					for (int i = 0; i < triangleCount; ++i){
+						materialIndices.push_back(indices->GetAt(i));
+						materialIndices.push_back(indices->GetAt(i));
+						materialIndices.push_back(indices->GetAt(i));
+					}
 				break;
 			case FbxGeometryElement::eAllSame:
-				for (int i = 0; i < triangleCount; ++i) materialIndices.push_back(indices->GetAt(0));
+				for (int i = 0; i < triangleCount; ++i){
+					materialIndices.push_back(indices->GetAt(0));
+					materialIndices.push_back(indices->GetAt(0));
+					materialIndices.push_back(indices->GetAt(0));
+				}
 				break;
 			default:
 				throw std::exception("Material index mapping mode error.");
 			}
 		}
 	}
-	if (materialIndices.size()) return 1;
+	if (materialIndices.size()){
+		std::vector<int> is;
+		int currentMatIndex = -1;
+		for (int i = 0; i < materialIndices.size(); ++i){
+			if (currentMatIndex != materialIndices[i]){
+				is.push_back(i);
+				currentMatIndex = materialIndices[i];
+			}
+		}
+		for (int i = 0; i < is.size(); ++i){
+			if (i + 1 <= is.size() - 1)
+				matInts.push_back(MaterialIndex(materialIndices[is[i]], is[i], is[i + 1] - 1));
+			else
+				matInts.push_back(MaterialIndex(materialIndices[is[i]], is[i], -1));
+		}
+		matInts[matInts.size() - 1].mEnd = materialIndices.size() - 1;
+		if (matInts.size()) return 1;
+	}
 	return 0;
 }
 void *CParser::getVertices1P1N1UV(FbxMesh *m)
@@ -41,7 +67,6 @@ void *CParser::getVertices1P1N1UV(FbxMesh *m)
 	FbxVector4 *fbxVertices = m->GetControlPoints();
 	UINT vertexCounter = 0;
 	for (UINT i = 0; i < m->GetPolygonCount(); i++){
-
 		for (UINT j = 0; j < 3; ++j){
 			int index = m->GetPolygonVertex(i, j);
 			Vertex1P1N1UV v;
@@ -92,6 +117,7 @@ bool CParser::getMaterials(FbxNode *n, std::vector<Material> &mats, std::vector<
 					}
 				}
 			}
+			//material->GetUniqueID(); // maybe??
 			if (material->GetClassId().Is(FbxSurfacePhong::ClassId)){
 				auto ambient = ((FbxSurfacePhong *)material)->Ambient;
 				XMFLOAT3 amb = XMFLOAT3(ambient.Get()[0], ambient.Get()[1], ambient.Get()[2]);

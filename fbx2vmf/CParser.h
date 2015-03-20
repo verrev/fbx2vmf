@@ -9,7 +9,7 @@ public:
 	MeshHeader getMeshHeader();
 	void *getVertices(FbxMesh *m);
 	bool getMaterials(FbxNode *n, std::vector<Material> &mats, std::vector<std::string> &textures);
-	bool CParser::getMaterialIndices(FbxMesh *m, std::vector<int> &materialIndices);
+	bool getMaterialIndices(FbxMesh *m, std::vector<MaterialIndex> &matInts);
 private:
 	void *getVertices1P(FbxMesh *m); 
 	void *getVertices1P1N(FbxMesh *m);

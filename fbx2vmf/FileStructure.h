@@ -9,13 +9,26 @@ enum MATERIAL_TYPE
 	PHONG,
 	LAMBERT
 };
+struct MaterialIndexHeader
+{
+	MaterialIndexHeader(){ /* do not use !*/ }
+	MaterialIndexHeader(const UINT &subMeshCount): mSubmeshCount(subMeshCount) {}
+	UINT mSubmeshCount;
+};
+struct MaterialIndex
+{
+	MaterialIndex(){ /* do not use !*/ }
+	MaterialIndex(const UINT &matIndex, const UINT &begin, const UINT &end)
+		: mMaterialIndex(matIndex), mBegin(begin), mEnd(end) {}
+	UINT mMaterialIndex, mBegin, mEnd;
+};
 struct MaterialHeader
 {
 	MaterialHeader() { /* do not use !*/ }
 	MaterialHeader(const UINT &matCount) :
 		mMaterialCount(matCount){}
 
-	UINT mMaterialCount; //perhaps?
+	UINT mMaterialCount;
 };
 struct Material
 {

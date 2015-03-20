@@ -14,6 +14,7 @@ void CExporter::exportModel(const std::string &outFilePath, std::vector<FbxMesh*
 	for (auto mesh : meshes){
 		exportMesh(mesh);
 	}
+	// Write materials.
 	exportMaterials(nodes);
 }
 UINT CExporter::getVertexSize(const VERTEX_LAYOUT &vl)
@@ -37,9 +38,11 @@ void CExporter::exportMesh(FbxMesh *mesh)
 	write(&mh, sizeof(MeshHeader));
 	write(vertices, getVertexSize(mh.mVertexLayout) * mh.mVerticeCount);
 	// experimental!
-	std::vector<int> materialIndices;
+	std::vector<MaterialIndex> materialIndices;
 	mParser.getMaterialIndices(mesh, materialIndices);
-	char f = 'a';
+	MaterialIndexHeader mih = MaterialIndexHeader(materialIndices.size());
+	write(&mih, sizeof(MaterialIndexHeader));
+	write(&materialIndices[0], sizeof(MaterialIndex) * mih.mSubmeshCount);
 }
 void CExporter::exportMaterials(std::vector<FbxNode*> nodes)
 {
