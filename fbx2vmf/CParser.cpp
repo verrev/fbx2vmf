@@ -10,30 +10,21 @@ void *CParser::getVertices(FbxMesh *m)
 	mMeshHeader = MeshHeader(-1);
 	return getVertices1P1N1UV(m); // modulate here
 }
-void getUV(FbxMesh* m, int i, int j, XMFLOAT2& outUV)
+bool CParser::getMaterialIndices(FbxMesh *m, std::vector<int> &materialIndices)
 {
-	FbxStringList lUVSetNameList;
-	m->GetUVSetNames(lUVSetNameList);
-	FbxVector2 fbxUV;
-	bool unmapped = 0;
-	m->GetPolygonVertexUV(i, j, lUVSetNameList.GetStringAt(0), fbxUV, unmapped);
-	outUV = XMFLOAT2(fbxUV.mData[0], 1 - fbxUV.mData[1]);
-}
-bool CParser::getMaterialIndices(FbxMesh *m,std::vector<int> &materialIndices)
-{
-	int triangleCount = 0; //resolve!
+	int triangleCount = m->GetPolygonCount(); 
 	FbxLayerElementArrayTemplate<int> *indices;
 	if (m->GetElementMaterial()){
 		indices = &(m->GetElementMaterial()->GetIndexArray());
 		if (indices){
 			switch (m->GetElementMaterial()->GetMappingMode()){
 			case FbxGeometryElement::eByPolygon:
-				if (indices->GetCount() == triangleCount) 
+				if (indices->GetCount() == triangleCount)
 					for (int i = 0; i < triangleCount; ++i) materialIndices.push_back(indices->GetAt(i));
-			break;
+				break;
 			case FbxGeometryElement::eAllSame:
 				for (int i = 0; i < triangleCount; ++i) materialIndices.push_back(indices->GetAt(0));
-			break;
+				break;
 			default:
 				throw std::exception("Material index mapping mode error.");
 			}
@@ -41,70 +32,6 @@ bool CParser::getMaterialIndices(FbxMesh *m,std::vector<int> &materialIndices)
 	}
 	if (materialIndices.size()) return 1;
 	return 0;
-}
-void getNormal(FbxMesh* inMesh, int inCtrlPointIndex, int inVertexCounter, XMFLOAT3& outNormal)
-{
-	if (inMesh->GetElementNormalCount() < 1)
-	{
-		throw std::exception("Invalid Normal Number");
-	}
-	FbxGeometryElementNormal* vertexNormal = inMesh->GetElementNormal(0);
-	switch (vertexNormal->GetMappingMode())
-	{
-	case FbxGeometryElement::eByControlPoint:
-		switch (vertexNormal->GetReferenceMode())
-		{
-		case FbxGeometryElement::eDirect:
-		{
-			outNormal.x = static_cast<float>(vertexNormal->GetDirectArray().GetAt(inCtrlPointIndex).mData[0]);
-			outNormal.y = static_cast<float>(vertexNormal->GetDirectArray().GetAt(inCtrlPointIndex).mData[1]);
-			outNormal.z = static_cast<float>(vertexNormal->GetDirectArray().GetAt(inCtrlPointIndex).mData[2]);
-		}
-		break;
-
-		case FbxGeometryElement::eIndexToDirect:
-		{
-			int index = vertexNormal->GetIndexArray().GetAt(inCtrlPointIndex);
-			outNormal.x = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[0]);
-			outNormal.y = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[1]);
-			outNormal.z = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[2]);
-		}
-		break;
-
-		default:
-			throw std::exception("Invalid Reference");
-		}
-		break;
-
-	case FbxGeometryElement::eByPolygonVertex:
-		switch (vertexNormal->GetReferenceMode())
-		{
-		case FbxGeometryElement::eDirect:
-		{
-			outNormal.x = static_cast<float>(vertexNormal->GetDirectArray().GetAt(inVertexCounter).mData[0]);
-			outNormal.y = static_cast<float>(vertexNormal->GetDirectArray().GetAt(inVertexCounter).mData[1]);
-			outNormal.z = static_cast<float>(vertexNormal->GetDirectArray().GetAt(inVertexCounter).mData[2]);
-		}
-		break;
-
-		case FbxGeometryElement::eIndexToDirect:
-		{
-			int index = vertexNormal->GetIndexArray().GetAt(inVertexCounter);
-			outNormal.x = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[0]);
-			outNormal.y = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[1]);
-			outNormal.z = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[2]);
-		}
-		break;
-
-		default:
-			throw std::exception("Invalid Reference");
-		}
-		break;
-	}
-}
-void getPosition(FbxVector4 *vertices, UINT index, XMFLOAT3 &pos)
-{
-	pos = XMFLOAT3(vertices[index].mData[0], vertices[index].mData[1], vertices[index].mData[2]);
 }
 void *CParser::getVertices1P1N1UV(FbxMesh *m)
 {
@@ -114,6 +41,7 @@ void *CParser::getVertices1P1N1UV(FbxMesh *m)
 	FbxVector4 *fbxVertices = m->GetControlPoints();
 	UINT vertexCounter = 0;
 	for (UINT i = 0; i < m->GetPolygonCount(); i++){
+
 		for (UINT j = 0; j < 3; ++j){
 			int index = m->GetPolygonVertex(i, j);
 			Vertex1P1N1UV v;
@@ -127,42 +55,6 @@ void *CParser::getVertices1P1N1UV(FbxMesh *m)
 	mMeshHeader.mVerticeCount = mVertices1P1N1UV.size();
 	mMeshHeader.mVertexLayout = vl;
 	return &mVertices1P1N1UV[0];
-}
-void *CParser::getVertices1P1N(FbxMesh *m)
-{
-	VERTEX_LAYOUT vl = VERTEX_LAYOUT::POSITION;
-	vl = static_cast<VERTEX_LAYOUT>(vl | VERTEX_LAYOUT::NORMAL);
-	FbxVector4 *fbxVertices = m->GetControlPoints();
-	UINT vertexCounter = 0;
-	for (UINT i = 0; i < m->GetPolygonCount(); i++){
-		for (UINT j = 0; j < 3; ++j){
-			int index = m->GetPolygonVertex(i, j);
-			Vertex1P1N v;
-			getPosition(fbxVertices, index, v.mPos);
-			getNormal(m, index, vertexCounter, v.mNormal);
-			mVertices1P1N.push_back(v);
-			++vertexCounter;
-		}
-	}
-	mMeshHeader.mVerticeCount = mVertices1P1N.size();
-	mMeshHeader.mVertexLayout = vl;
-	return &mVertices1P1N[0];
-}
-void *CParser::getVertices1P(FbxMesh *m)
-{
-	VERTEX_LAYOUT vl = VERTEX_LAYOUT::POSITION;
-	FbxVector4 *fbxVertices = m->GetControlPoints();
-	for (UINT i = 0; i < m->GetPolygonCount(); i++){
-		for (UINT j = 0; j < 3; ++j){
-			int index = m->GetPolygonVertex(i, j);
-			Vertex1P v;
-			getPosition(fbxVertices, index, v.mPos);
-			mVertices1P.push_back(v);
-		}
-	}
-	mMeshHeader.mVerticeCount = mVertices1P.size();
-	mMeshHeader.mVertexLayout = vl;
-	return &mVertices1P[0];
 }
 bool CParser::getMaterials(FbxNode *n, std::vector<Material> &mats, std::vector<std::string> &textures)
 {
@@ -241,7 +133,116 @@ bool CParser::getMaterials(FbxNode *n, std::vector<Material> &mats, std::vector<
 	return 0;
 }
 
+void CParser::getUV(FbxMesh* m, int i, int j, XMFLOAT2& outUV)
+{
+	FbxStringList lUVSetNameList;
+	m->GetUVSetNames(lUVSetNameList);
+	FbxVector2 fbxUV;
+	bool unmapped = 0;
+	m->GetPolygonVertexUV(i, j, lUVSetNameList.GetStringAt(0), fbxUV, unmapped);
+	outUV = XMFLOAT2(fbxUV.mData[0], 1 - fbxUV.mData[1]);
+}
 
+void CParser::getNormal(FbxMesh* inMesh, int inCtrlPointIndex, int inVertexCounter, XMFLOAT3& outNormal)
+{
+	if (inMesh->GetElementNormalCount() < 1)
+	{
+		throw std::exception("Invalid Normal Number");
+	}
+	FbxGeometryElementNormal* vertexNormal = inMesh->GetElementNormal(0);
+	switch (vertexNormal->GetMappingMode())
+	{
+	case FbxGeometryElement::eByControlPoint:
+		switch (vertexNormal->GetReferenceMode())
+		{
+		case FbxGeometryElement::eDirect:
+		{
+			outNormal.x = static_cast<float>(vertexNormal->GetDirectArray().GetAt(inCtrlPointIndex).mData[0]);
+			outNormal.y = static_cast<float>(vertexNormal->GetDirectArray().GetAt(inCtrlPointIndex).mData[1]);
+			outNormal.z = static_cast<float>(vertexNormal->GetDirectArray().GetAt(inCtrlPointIndex).mData[2]);
+		}
+		break;
+
+		case FbxGeometryElement::eIndexToDirect:
+		{
+			int index = vertexNormal->GetIndexArray().GetAt(inCtrlPointIndex);
+			outNormal.x = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[0]);
+			outNormal.y = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[1]);
+			outNormal.z = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[2]);
+		}
+		break;
+
+		default:
+			throw std::exception("Invalid Reference");
+		}
+		break;
+
+	case FbxGeometryElement::eByPolygonVertex:
+		switch (vertexNormal->GetReferenceMode())
+		{
+		case FbxGeometryElement::eDirect:
+		{
+			outNormal.x = static_cast<float>(vertexNormal->GetDirectArray().GetAt(inVertexCounter).mData[0]);
+			outNormal.y = static_cast<float>(vertexNormal->GetDirectArray().GetAt(inVertexCounter).mData[1]);
+			outNormal.z = static_cast<float>(vertexNormal->GetDirectArray().GetAt(inVertexCounter).mData[2]);
+		}
+		break;
+
+		case FbxGeometryElement::eIndexToDirect:
+		{
+			int index = vertexNormal->GetIndexArray().GetAt(inVertexCounter);
+			outNormal.x = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[0]);
+			outNormal.y = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[1]);
+			outNormal.z = static_cast<float>(vertexNormal->GetDirectArray().GetAt(index).mData[2]);
+		}
+		break;
+
+		default:
+			throw std::exception("Invalid Reference");
+		}
+		break;
+	}
+}
+void CParser::getPosition(FbxVector4 *vertices, UINT index, XMFLOAT3 &pos)
+{
+	pos = XMFLOAT3(vertices[index].mData[0], vertices[index].mData[1], vertices[index].mData[2]);
+}
+void *CParser::getVertices1P1N(FbxMesh *m)
+{
+	VERTEX_LAYOUT vl = VERTEX_LAYOUT::POSITION;
+	vl = static_cast<VERTEX_LAYOUT>(vl | VERTEX_LAYOUT::NORMAL);
+	FbxVector4 *fbxVertices = m->GetControlPoints();
+	UINT vertexCounter = 0;
+	for (UINT i = 0; i < m->GetPolygonCount(); i++){
+		for (UINT j = 0; j < 3; ++j){
+			int index = m->GetPolygonVertex(i, j);
+			Vertex1P1N v;
+			getPosition(fbxVertices, index, v.mPos);
+			getNormal(m, index, vertexCounter, v.mNormal);
+			mVertices1P1N.push_back(v);
+			++vertexCounter;
+		}
+	}
+	mMeshHeader.mVerticeCount = mVertices1P1N.size();
+	mMeshHeader.mVertexLayout = vl;
+	return &mVertices1P1N[0];
+}
+void *CParser::getVertices1P(FbxMesh *m)
+{
+	VERTEX_LAYOUT vl = VERTEX_LAYOUT::POSITION;
+	FbxVector4 *fbxVertices = m->GetControlPoints();
+	for (UINT i = 0; i < m->GetPolygonCount(); i++){
+		for (UINT j = 0; j < 3; ++j){
+			int index = m->GetPolygonVertex(i, j);
+			Vertex1P v;
+			getPosition(fbxVertices, index, v.mPos);
+			mVertices1P.push_back(v);
+		}
+	}
+	mMeshHeader.mVerticeCount = mVertices1P.size();
+	mMeshHeader.mVertexLayout = vl;
+	return &mVertices1P[0];
+}
 
 /*
 void getUV(FbxMesh* inMesh, int inCtrlPointIndex, int inTextureUVIndex, int inUVLayer, XMFLOAT2& outUV)

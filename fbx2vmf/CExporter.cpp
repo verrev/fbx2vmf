@@ -36,6 +36,10 @@ void CExporter::exportMesh(FbxMesh *mesh)
 	MeshHeader mh = mParser.getMeshHeader();
 	write(&mh, sizeof(MeshHeader));
 	write(vertices, getVertexSize(mh.mVertexLayout) * mh.mVerticeCount);
+	// experimental!
+	std::vector<int> materialIndices;
+	mParser.getMaterialIndices(mesh, materialIndices);
+	char f = 'a';
 }
 void CExporter::exportMaterials(std::vector<FbxNode*> nodes)
 {
@@ -44,7 +48,7 @@ void CExporter::exportMaterials(std::vector<FbxNode*> nodes)
 	for (auto node : nodes){
 		mParser.getMaterials(node,materials,textures);
 	}
-	std::set<std::string> textureSet(textures.begin(), textures.end());
+	std::set<std::string> textureSet(textures.begin(), textures.end()); // this might mangle the indexes of mats.
 	std::vector<std::string> texs(textureSet.begin(),textureSet.end()); // only unique ones left
 	if (materials.size()){
 		std::string s = mModelFilePath;

@@ -14,6 +14,9 @@ private:
 	void *getVertices1P(FbxMesh *m); 
 	void *getVertices1P1N(FbxMesh *m);
 	void *getVertices1P1N1UV(FbxMesh *m);
+	void getUV(FbxMesh* m, int i, int j, XMFLOAT2& outUV);
+	void getNormal(FbxMesh* inMesh, int inCtrlPointIndex, int inVertexCounter, XMFLOAT3& outNormal);
+	void getPosition(FbxVector4 *vertices, UINT index, XMFLOAT3 &pos);
 private:
 	MeshHeader mMeshHeader;
 	std::vector<Vertex1P> mVertices1P; 

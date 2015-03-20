@@ -1,5 +1,5 @@
 #include "CConverter.h"
-//#define DBG 
+#define DBG 
 int main(int argc, char *argv[])
 {
 #ifdef DBG
